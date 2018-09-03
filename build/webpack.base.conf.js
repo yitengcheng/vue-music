@@ -33,8 +33,12 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
-    alias: {
+    alias: {//提供别名来缩短我们字符串的长度
+      'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'src': path.resolve(__dirname, '../src'),
+      'components': path.resolve(__dirname, '../src/components'),
+      'common': path.resolve(__dirname, '../src/common'),
     }
   },
   module: {
@@ -73,6 +77,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.sass$/,
+        loaders: ['style', 'css', 'sass']
       }
     ]
   },
