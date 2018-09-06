@@ -1,15 +1,23 @@
 <template>
   <div id="app">
     <m-header></m-header>
+    <Tab></Tab>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import MHeader from 'components/m-header/m-header';
+import Tab from 'components/tab/tab';
 export default {
-  components: { MHeader }
+  components: { MHeader, Tab }
 };
 </script>
 
 <style lang="scss">
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 </style>
