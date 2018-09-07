@@ -9,6 +9,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const axios = require('axios')
+const bodyParser = require('body-parser')
+const serverRouters = require('../server/router')
+const _ = require('lodash');
+
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -22,6 +27,26 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+    before (app) {
+      app.use(bodyParser.urlencoded({ extended: true }))
+      _.forEach(serverRouters.routers, (item) => {
+        app.get(item.router, (req, res) => {
+          axios.get(item.serverUrl, {
+            headers: {
+              referer: 'https://c.y.qq.com/',
+              host: 'c.y.qq.com'
+            },
+            params: req.query
+          }).then((response) => {
+            res.json(response.data)
+          }).catch((e) => {
+            console.log(e);
+          });
+        });
+      })
+
+    },
+
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [
@@ -85,8 +110,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)
