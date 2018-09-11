@@ -30,7 +30,6 @@
 <script type="text/ecmascript-6">
 import { Loading } from 'element-ui';
 import { jsonpGet, get } from 'api/get';
-import { ERR_OK } from 'api/config';
 export default {
   created () {
     this._getRecommend();
@@ -45,7 +44,7 @@ export default {
         needNewCode: 1
       };
       jsonpGet(url, param).then((res) => {
-        if (res.code === ERR_OK) {
+        if (res.code === this.ERR_OK) {
           this.recommends = res.data.slider;
         }
       });
@@ -63,7 +62,7 @@ export default {
         format: 'json'
       };
       get('getDiscList', param).then((res) => {
-        if (res.code === ERR_OK) {
+        if (res.code === this.ERR_OK) {
           this.discList = res.data.list;
           this.loading = false;
         }
@@ -76,9 +75,6 @@ export default {
       discList: [],
       loading: true
     };
-  },
-  components: {
-
   }
 };
 </script>
@@ -88,6 +84,7 @@ export default {
 
 .container {
   position: relative;
+  top: 5px;
   width: 100%;
   height: 100%;
   overflow: hidden;

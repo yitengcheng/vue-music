@@ -8,11 +8,16 @@ import 'common/scss/index.scss';
 import router from './router';
 import fastclick from 'fastclick';
 import Axios from 'axios';
+import { ERR_OK } from 'api/config';
 
 fastclick.attach(document.body);
+Vue.config.productionTip = false;
 Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
+Vue.use(VueLazyLoad, {
+  loading: require('common/image/default.png')
+});
+Vue.prototype.ERR_OK = ERR_OK;
 let loading = {};
-
 // 请求拦截器
 Axios.interceptors.request.use((config) => {
   loading = Vue.prototype.$loading({ text: '正在载入中...' });
@@ -27,11 +32,6 @@ Axios.interceptors.response.use((response) => {
   return response;
 }, (err) => {
   return Promise.reject(err);
-});
-
-Vue.config.productionTip = false;
-Vue.use(VueLazyLoad, {
-  loading: require('common/image/default.png')
 });
 
 /* eslint-disable no-new */
