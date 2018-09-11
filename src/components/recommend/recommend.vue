@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-loading="loading" element-loading-text="正在载入..." element-loading-background="rgba(0, 0, 0, 0.8)">
+  <div class="container">
     <div class="slider-wrapper">
       <el-carousel height="150px" indicator-position="none" arrow="always" ref="carousel">
         <el-carousel-item v-for="(item, index) in recommends" :key="index">
