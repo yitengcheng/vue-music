@@ -1,0 +1,62 @@
+<template>
+  <div ref="wrapper">
+    <slot></slot>
+    <!-- slot插槽,用法便为外部调用该组件,可以传入子组件 -->
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+import BScroll from 'better-scroll';
+
+export default {
+  props: {
+    probeType: {
+      type: Number,
+      default: 1
+    },
+    click: {
+      type: Boolean,
+      default: true
+    },
+    data: {
+      type: Array,
+      default: null
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      this._initScroll();
+    }, 20);
+  },
+  methods: {
+    _initScroll () {
+      if (!this.$refs.wrapper) {
+        return;
+      }
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        probeType: this.probeType,
+        click: this.click
+      });
+    },
+    enable () {
+      this.scroll && this.scroll.enable();
+    },
+    disable () {
+      this.scroll && this.scroll.disable();
+    },
+    refrsh () {
+      this.scroll && this.scroll.refrsh();
+    }
+  },
+  watch: {
+    data () {
+      setTimeout(() => {
+        this.refrsh();
+      }, 20);
+    }
+  }
+};
+</script>
+
+<style scoped lang="scss">
+</style>

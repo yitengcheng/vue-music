@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading" element-loading-text="正在载入..." element-loading-background="rgba(0, 0, 0, 0.8)">
     <div class="slider-wrapper">
       <el-carousel height="150px" indicator-position="none" arrow="always" ref="carousel">
         <el-carousel-item v-for="(item, index) in recommends" :key="index">
@@ -14,7 +14,7 @@
       <ul>
         <li v-for="(item,index) in discList" :key="index" class="item">
           <div class="icon">
-            <img :src="item.imgurl" width="60" height="60" />
+            <img v-lazy="item.imgurl" width="60" height="60" />
           </div>
           <div class="text">
             <!-- v-html 用于转换数据中html符号 如:&nsp; -->
@@ -28,6 +28,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { Loading } from 'element-ui';
 import { jsonpGet, get } from 'api/get';
 import { ERR_OK } from 'api/config';
 export default {
@@ -64,6 +65,7 @@ export default {
       get('getDiscList', param).then((res) => {
         if (res.code === ERR_OK) {
           this.discList = res.data.list;
+          this.loading = false;
         }
       });
     }
@@ -71,7 +73,8 @@ export default {
   data () {
     return {
       recommends: [],
-      discList: []
+      discList: [],
+      loading: true
     };
   },
   components: {
@@ -84,9 +87,9 @@ export default {
 @import "~common/scss/variable";
 
 .container {
-  position: absolute;
-  top: 90px;
+  position: relative;
   width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 .slider-wrapper {
