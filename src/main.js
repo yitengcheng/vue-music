@@ -7,8 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'common/scss/index.scss';
 import router from './router';
 import fastclick from 'fastclick';
-import Axios from 'axios';
+import axios from 'axios';
 import { ERR_OK } from 'api/config';
+import _ from 'lodash';
 
 fastclick.attach(document.body);
 Vue.config.productionTip = false;
@@ -17,9 +18,11 @@ Vue.use(VueLazyLoad, {
   loading: require('common/image/default.png')
 });
 Vue.prototype.ERR_OK = ERR_OK;
+Vue.prototype._ = _;
+Vue.prototype.ajax = axios;
 let loading = {};
 // 请求拦截器
-Axios.interceptors.request.use((config) => {
+axios.interceptors.request.use((config) => {
   loading = Vue.prototype.$loading({ text: '正在载入中...' });
   return config;
 }, (err) => {
@@ -27,7 +30,7 @@ Axios.interceptors.request.use((config) => {
 });
 
 // 响应拦截器
-Axios.interceptors.response.use((response) => {
+axios.interceptors.response.use((response) => {
   loading.close(); // 关闭loading
   return response;
 }, (err) => {
