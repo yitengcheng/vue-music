@@ -87,7 +87,7 @@ export default {
   top: 5px;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: scroll;
 }
 .slider-wrapper {
   display: block;

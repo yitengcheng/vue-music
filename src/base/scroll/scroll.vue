@@ -44,14 +44,14 @@ export default {
     disable () {
       this.scroll && this.scroll.disable();
     },
-    refrsh () {
-      this.scroll && this.scroll.refrsh();
+    refresh () {
+      this.scroll && this.scroll.refresh();
     }
   },
   watch: {
     data () {
       setTimeout(() => {
-        this.refrsh();
+        this.refresh();
       }, 20);
     }
   }

@@ -1,12 +1,13 @@
 <template>
   <div class="container">
-    歌手页面
+    <list-view :data="singers"></list-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { jsonpGet } from 'api/get';
 import Singer from 'common/js/singer';
+import ListView from 'base/listview/listview';
 
 const HOT_NAME = '热门';
 const HOT_SINGER_LEN = 10;
@@ -21,7 +22,10 @@ export default {
     };
   },
   components: {
-
+    ListView
+  },
+  mounted () {
+    console.log(this.singers);
   },
   methods: {
     _getSingers () {
@@ -38,8 +42,8 @@ export default {
       };
       jsonpGet(url, param).then((res) => {
         if (res.code === this.ERR_OK) {
-          this.singers = res.data.list;
-          console.log(this._normalizeSinger(this.singers));
+          this.singers = this._normalizeSinger(res.data.list);
+          console.log(this.singers);
         }
       });
     },
