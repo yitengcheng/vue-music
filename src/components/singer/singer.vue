@@ -43,7 +43,6 @@ export default {
       jsonpGet(url, param).then((res) => {
         if (res.code === this.ERR_OK) {
           this.singers = this._normalizeSinger(res.data.list);
-          console.log(this.singers);
         }
       });
     },
