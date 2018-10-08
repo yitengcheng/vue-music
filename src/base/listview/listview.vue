@@ -18,6 +18,9 @@
         </li>
       </ul>
     </div>
+    <div class="list-fixed" v-show="fixedTitle" ref="fixed">
+      <h1 class="fixed-title">{{fixedTitle}}</h1>
+    </div>
   </Scroll>
 </template>
 
@@ -26,6 +29,7 @@ import Scroll from 'base/scroll/scroll';
 import { getData } from 'common/js/dom';
 
 const ANCHOR_HEIGHT = 18;
+const TITLE_HEIGHT = 30;
 
 export default {
   created () {
@@ -37,7 +41,8 @@ export default {
   data () {
     return {
       scrollY: -1,
-      currentIndex: 0
+      currentIndex: 0,
+      diff: -1
     };
   },
   props: {
@@ -51,6 +56,12 @@ export default {
       return this.data.map((group) => {
         return group.title.substr(0, 1);
       });
+    },
+    fixedTitle () {
+      if (this.scrollY > 0) {
+        return '';
+      }
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : '';
     }
   },
   methods: {
@@ -72,6 +83,15 @@ export default {
       this.scrollY = pos.y;
     },
     _scrollTo (index) {
+      if (!index && index !== 0) {
+        return;
+      }
+      if (index < 0) {
+        index = 0;
+      } else if (index > this.listHeight.length - 2) {
+        index = this.listHeight.length - 2;
+      }
+      this.scrollY = -this.listHeight[index];
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0);
     },
     _calculateHeight () {
@@ -105,11 +125,20 @@ export default {
         let height2 = listHeight[i + 1];
         if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i;
+          this.diff = height2 + newY;
           return;
         }
       }
       // 当滚动到底部,且-newY大于最后一个元素上限
       this.currentIndex = this.listHeight.length - 2;
+    },
+    diff (newVal) {
+      let fixedTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0;
+      if (this.fixedTop === fixedTop) {
+        return;
+      }
+      this.fixedTop = fixedTop;
+      this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`;
     }
   },
   components: { Scroll }

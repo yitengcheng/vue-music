@@ -19,7 +19,10 @@ export default {
 
 <style scoped lang="scss">
 .container {
-  display: flex;
-  flex: 1;
+  position: relative;
+  top: 5px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>
