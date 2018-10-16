@@ -11,6 +11,8 @@ import axios from 'axios';
 import { ERR_OK } from 'api/config';
 import _ from 'lodash';
 import store from './store';
+import { get } from './api/get';
+import { post } from './api/post';
 
 fastclick.attach(document.body);
 Vue.config.productionTip = false;
@@ -21,6 +23,8 @@ Vue.use(VueLazyLoad, {
 Vue.prototype.ERR_OK = ERR_OK;
 Vue.prototype._ = _;
 Vue.prototype.ajax = axios;
+Vue.prototype.get = get;
+Vue.prototype.post = post;
 let loading = {};
 // 请求拦截器
 axios.interceptors.request.use((config) => {

@@ -29,7 +29,7 @@
 
 <script type="text/ecmascript-6">
 import { Loading } from 'element-ui';
-import { jsonpGet, get } from 'api/get';
+import { jsonpGet } from 'api/get';
 export default {
   created () {
     this._getRecommend();
@@ -61,7 +61,7 @@ export default {
         rnd: Math.random(),
         format: 'json'
       };
-      get('getDiscList', param).then((res) => {
+      this.get('getDiscList', param).then((res) => {
         if (res.code === this.ERR_OK) {
           this.discList = res.data.list;
           this.loading = false;
