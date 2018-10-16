@@ -10,6 +10,7 @@ import fastclick from 'fastclick';
 import axios from 'axios';
 import { ERR_OK } from 'api/config';
 import _ from 'lodash';
+import store from './store';
 
 fastclick.attach(document.body);
 Vue.config.productionTip = false;
@@ -41,5 +42,6 @@ axios.interceptors.response.use((response) => {
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 });

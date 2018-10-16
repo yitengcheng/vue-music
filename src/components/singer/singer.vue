@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <list-view :data="singers"></list-view>
+    <list-view :data="singers" @select="selectSinger"></list-view>
+    <transition :name="transitionName">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -8,6 +11,7 @@
 import { jsonpGet } from 'api/get';
 import Singer from 'common/js/singer';
 import ListView from 'base/listview/listview';
+import { mapMutations } from 'vuex';
 
 const HOT_NAME = '热门';
 const HOT_SINGER_LEN = 10;
@@ -18,7 +22,8 @@ export default {
   },
   data () {
     return {
-      singers: []
+      singers: [],
+      transitionName: 'slide-left'
     };
   },
   components: {
@@ -28,6 +33,12 @@ export default {
     console.log(this.singers);
   },
   methods: {
+    selectSinger (singer) {
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      });
+      this.setSinger(singer);
+    },
     _getSingers () {
       let url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg';
       let param = {
@@ -87,6 +98,17 @@ export default {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0);
       });
       return hot.concat(ret);
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
+  },
+  watch: {
+    '$route' (to, from) { // 使用watch 监听$router的变化
+      // 如果to索引大于from索引,判断为前进状态,反之则为后退状态
+      const toDepth = to.path.split('/').length;
+      const fromDepth = from.path.split('/').length;
+      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
     }
   }
 };
@@ -99,5 +121,19 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all 0.3s;
+}
+.slide-left-enter,
+.slide-left-to {
+  transform: translate3d(100%, 0, 0);
+}
+.slide-right-enter,
+.slide-right-to {
+  transform: translate3d(-100%, 0, 0);
 }
 </style>
