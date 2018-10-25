@@ -1,13 +1,17 @@
 <template>
-  <div id="app">
-    <m-header></m-header>
-    <Tab></Tab>
-    <transition :name="transitionName">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
-    </transition>
-  </div>
+  <el-container id="app">
+    <el-header height='44px'>
+      <m-header></m-header>
+    </el-header>
+    <el-main>
+      <Tab></Tab>
+      <transition :name="transitionName">
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+      </transition>
+    </el-main>
+  </el-container>
 </template>
 
 <script type="text/ecmascript-6">
@@ -32,9 +36,23 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
-  position: relative;
-  height: 100%;
+.el-header {
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+.el-main {
+  display: block;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -ms-flex-preferred-size: auto;
+  flex-basis: auto;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
 }
 .slide-right-enter-active,
 .slide-right-leave-active,
