@@ -5,7 +5,7 @@
     </div>
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
-      <div class="filter"></div>
+      <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer">
       <scroll @scroll="scroll" :probeType="probeType" :listen-scroll="listenScroll" :data="songs" class="list" ref="list">
@@ -20,8 +20,11 @@
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll';
 import SongList from 'base/song-list/song-list';
+import { prefixStyle } from 'common/js/dom';
 
 const RESERVED_HEIGHT = 40;
+const transform = prefixStyle('transform');
+const backrop = prefixStyle('backrop-filter');
 
 export default {
   props: {
@@ -50,7 +53,6 @@ export default {
   mounted () {
     this.imageHeight = this.$refs.bgImage.clientHeight;
     this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT;
-    this.$refs.list.$el.style.top = `${this.imageHeight}px`;
   },
   methods: {
     goback () {
@@ -66,12 +68,21 @@ export default {
     };
   },
   watch: {
-    scrollY (newY) {
-      let tranlateY = Math.max(this.minTranslateY, newY);
+    scrollY (newVal) {
+      let tranlateY = Math.max(this.minTranslateY, newVal);
       let zIndex = 0;
-      this.$refs.layer.style['transform'] = `translate3d(0, ${tranlateY}px, 0)`;
-      this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${tranlateY}px, 0)`;
-      if (newY < this.minTranslateY) {
+      let scale = 1;
+      let blur = 0;
+      const percent = Math.abs(newVal / this.imageHeight);
+      this.$refs.layer.style[transform] = `translate3d(0, ${tranlateY}px, 0)`;
+      if (newVal > 0) {
+        scale = 1 + percent;
+        zIndex = 10;
+      } else {
+        blur = Math.min(20 * percent, 20);
+      }
+      this.$refs.filter.style[backrop] = `blur(${blur}px)`;
+      if (newVal < this.minTranslateY) {
         zIndex = 10;
         this.$refs.bgImage.style.padingTop = 0;
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`;
@@ -79,7 +90,7 @@ export default {
         this.$refs.bgImage.style.padingTop = '70%';
         this.$refs.bgImage.style.height = 0;
       }
-      this.$refs.bgImage.style.zIndex = zIndex;
+      this.$refs.bgImage.style[transform] = `scale: (${scale})`;
     }
   },
   components: {

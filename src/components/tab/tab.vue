@@ -1,5 +1,5 @@
 <template>
-  <el-menu mode="horizontal" :default-active="$route.path" router class="el-menu" active-text-color="#ffcd32">
+  <el-menu mode="horizontal" :default-active="$route.path" router class="el-menu" active-text-color="#ffcd32" background-color="#222">
     <el-menu-item class="el-menu-item" index="/recommend">推荐</el-menu-item>
     <el-menu-item class="el-menu-item" index="/singer">歌手</el-menu-item>
     <el-menu-item class="el-menu-item" index="/rank">排行</el-menu-item>
@@ -14,9 +14,6 @@ export default {
       activeIndex: '1'
     };
   },
-  components: {
-
-  }
 };
 </script>
 
@@ -35,6 +32,5 @@ export default {
   line-height: 44px;
   text-align: center;
   color: $color-text-l;
-  background-color: $color-background;
 }
 </style>
