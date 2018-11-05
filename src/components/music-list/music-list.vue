@@ -5,6 +5,12 @@
     </div>
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
+      <div class="play-wrapper">
+        <div ref="playBtn" class="play" v-show="songs.length > 0">
+          <i class="icon-play2"></i>
+          <span class="text">随机播放全部</span>
+        </div>
+      </div>
       <div class="filter" ref="filter"></div>
     </div>
     <div class="bg-layer" ref="layer">
@@ -68,27 +74,30 @@ export default {
     };
   },
   watch: {
-    scrollY (newVal) {
+    scrollY (newVal, oldVal) {
       let tranlateY = Math.max(this.minTranslateY, newVal);
       let zIndex = 0;
       let scale = 1;
       let blur = 0;
       const percent = Math.abs(newVal / this.imageHeight);
-      this.$refs.layer.style[transform] = `translate3d(0, ${tranlateY}px, 0)`;
       if (newVal > 0) {
         scale = 1 + percent;
         zIndex = 10;
       } else {
         blur = Math.min(20 * percent, 20);
       }
+      this.$refs.layer.style[transform] = `translate3d(0, ${tranlateY}px, 0)`;
+      this.$refs.playBtn.style[transform] = `translate3d(0, ${tranlateY}px, 0)`;
       this.$refs.filter.style[backrop] = `blur(${blur}px)`;
       if (newVal < this.minTranslateY) {
         zIndex = 10;
         this.$refs.bgImage.style.padingTop = 0;
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`;
+        this.$refs.playBtn.style.display = 'none';
       } else {
         this.$refs.bgImage.style.padingTop = '70%';
         this.$refs.bgImage.style.height = 0;
+        this.$refs.playBtn.style.display = '';
       }
       this.$refs.bgImage.style[transform] = `scale: (${scale})`;
     }
@@ -139,10 +148,16 @@ export default {
 .bg-image {
   position: relative;
   width: 100%;
-  height: 0;
+  height: 210;
   padding-top: 70%;
   transform-origin: top;
   background-size: cover;
+}
+.play-wrapper {
+  position: absolute;
+  bottom: 20px;
+  z-index: 50;
+  width: 100%;
 }
 .play {
   box-sizing: border-box;
@@ -155,7 +170,7 @@ export default {
   border-radius: 100px;
   font-size: 0;
 }
-.icon-play {
+.icon-play2 {
   display: inline-block;
   vertical-align: middle;
   margin-right: 6px;
