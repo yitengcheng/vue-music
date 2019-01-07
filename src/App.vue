@@ -11,14 +11,18 @@
         </keep-alive>
       </transition>
     </el-main>
+    <el-footer>
+      <player></player>
+    </el-footer>
   </el-container>
 </template>
 
 <script type="text/ecmascript-6">
 import MHeader from 'components/m-header/m-header';
 import Tab from 'components/tab/tab';
+import Player from 'components/player/player';
 export default {
-  components: { MHeader, Tab },
+  components: { MHeader, Tab, Player },
   data () {
     return {
       transitionName: 'slide-left'

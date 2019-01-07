@@ -1,22 +1,52 @@
 <template>
   <div class="music-list">
-    <div class="back" @click="goback">
+    <div
+      class="back"
+      @click="goback"
+    >
       <i class="el-icon-back"></i>
     </div>
-    <h1 class="title" v-html="title"></h1>
-    <div class="bg-image" :style="bgStyle" ref="bgImage">
+    <h1
+      class="title"
+      v-html="title"
+    ></h1>
+    <div
+      class="bg-image"
+      :style="bgStyle"
+      ref="bgImage"
+    >
       <div class="play-wrapper">
-        <div ref="playBtn" class="play" v-show="songs.length > 0">
+        <div
+          ref="playBtn"
+          class="play"
+          v-show="songs.length > 0"
+        >
           <i class="icon-play2"></i>
           <span class="text">随机播放全部</span>
         </div>
       </div>
-      <div class="filter" ref="filter"></div>
+      <div
+        class="filter"
+        ref="filter"
+      ></div>
     </div>
-    <div class="bg-layer" ref="layer">
-      <scroll @scroll="scroll" :probeType="probeType" :listen-scroll="listenScroll" :data="songs" class="list" ref="list">
+    <div
+      class="bg-layer"
+      ref="layer"
+    >
+      <scroll
+        @scroll="scroll"
+        :probeType="probeType"
+        :listen-scroll="listenScroll"
+        :data="songs"
+        class="list"
+        ref="list"
+      >
         <div class="song-list-wrapper">
-          <song-list :songs="songs"></song-list>
+          <song-list
+            @select="selectItem"
+            :songs="songs"
+          ></song-list>
         </div>
       </scroll>
     </div>
@@ -27,6 +57,7 @@
 import Scroll from 'base/scroll/scroll';
 import SongList from 'base/song-list/song-list';
 import { prefixStyle } from 'common/js/dom';
+import { mapActions } from 'vuex';
 
 const RESERVED_HEIGHT = 40;
 const transform = prefixStyle('transform');
@@ -66,7 +97,16 @@ export default {
     },
     scroll (pos) {
       this.scrollY = pos.y;
-    }
+    },
+    selectItem (item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      });
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
   data () {
     return {
